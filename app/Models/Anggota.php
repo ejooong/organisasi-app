@@ -25,6 +25,7 @@ class Anggota extends Model
         'pekerjaan',
         
         // KTP
+        'foto_ktp',
         'ktp_provinsi_code',
         'ktp_provinsi_name',
         'ktp_kota_code',

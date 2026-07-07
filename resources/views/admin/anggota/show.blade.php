@@ -63,6 +63,16 @@
                             <th>Pekerjaan</th>
                             <td>{{ $anggota->pekerjaan }}</td>
                         </tr>
+                        <tr>
+                            <th>Foto KTP</th>
+                            <td>
+                                @if($anggota->foto_ktp)
+                                    <img src="{{ asset('storage/' . $anggota->foto_ktp) }}" alt="Foto KTP" class="img-thumbnail" style="max-height: 200px;">
+                                @else
+                                    <span class="text-muted">Tidak ada foto</span>
+                                @endif
+                            </td>
+                        </tr>
                     </table>
                     
                     <!-- Alamat KTP -->

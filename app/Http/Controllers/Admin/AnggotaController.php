@@ -104,6 +104,7 @@ class AnggotaController extends Controller
         'agama' => 'required|string',
         'pendidikan_terakhir' => 'required|string',
         'pekerjaan' => 'required|string',
+        'foto_ktp' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         
         // Alamat KTP - hanya kode (nama diambil dari select option text)
         'ktp_provinsi_code' => 'required|string',
@@ -151,6 +152,12 @@ class AnggotaController extends Controller
         // Konversi ketertarikan ke JSON jika ada
         if (isset($validated['ketertarikan']) && is_array($validated['ketertarikan'])) {
             $validated['ketertarikan'] = json_encode($validated['ketertarikan']);
+        }
+        
+        // Upload foto KTP
+        if ($request->hasFile('foto_ktp')) {
+            $fotoPath = $request->file('foto_ktp')->store('foto_ktp', 'public');
+            $validated['foto_ktp'] = $fotoPath;
         }
         
         // Simpan anggota
@@ -225,6 +232,7 @@ private function getSelectedText($selectId): string
             'agama' => 'required|string',
             'pendidikan_terakhir' => 'required|string',
             'pekerjaan' => 'required|string',
+            'foto_ktp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             
             // Alamat KTP
             'ktp_provinsi_code' => 'required|string',
@@ -259,6 +267,18 @@ private function getSelectedText($selectId): string
         $validated['domisili_kota_name'] = $request->input('domisili_kota_name') ?: $validated['domisili_kota_code'];
         $validated['domisili_kecamatan_name'] = $request->input('domisili_kecamatan_name') ?: $validated['domisili_kecamatan_code'];
         $validated['domisili_kelurahan_name'] = $request->input('domisili_kelurahan_name') ?: $validated['domisili_kelurahan_code'];
+        
+        if (isset($validated['ketertarikan']) && is_array($validated['ketertarikan'])) {
+            $validated['ketertarikan'] = json_encode($validated['ketertarikan']);
+        }
+        
+        if ($request->hasFile('foto_ktp')) {
+            if ($anggota->foto_ktp) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($anggota->foto_ktp);
+            }
+            $fotoPath = $request->file('foto_ktp')->store('foto_ktp', 'public');
+            $validated['foto_ktp'] = $fotoPath;
+        }
         
         $anggota->update($validated);
         

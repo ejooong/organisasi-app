@@ -127,6 +127,13 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Foto KTP <span class="text-danger">*</span></label>
+                                    <input type="file" name="foto_ktp" class="form-control" accept="image/jpeg,image/png,image/jpg" required>
+                                    <small class="text-muted">Format: JPG, JPEG, PNG. Maksimal 2MB.</small>
+                                </div>
+                            </div>
                             
                             <div class="mb-3">
                                 <label class="form-label">Hal yang Menjadi Ketertarikan Pribadi</label>
@@ -690,7 +697,9 @@ $(document).ready(function() {
         $.ajax({
             url: '{{ route("admin.anggota.store") }}',
             method: 'POST',
-            data: $(this).serialize(),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

@@ -115,6 +115,19 @@
                                 </div>
                             </div>
                             
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Foto KTP</label>
+                                    @if($anggota->foto_ktp)
+                                        <div class="mb-2">
+                                            <img src="{{ asset('storage/' . $anggota->foto_ktp) }}" alt="Foto KTP" class="img-thumbnail" style="max-height: 150px;">
+                                        </div>
+                                    @endif
+                                    <input type="file" name="foto_ktp" class="form-control" accept="image/jpeg,image/png,image/jpg">
+                                    <small class="text-muted">Format: JPG, JPEG, PNG. Maksimal 2MB. Kosongkan jika tidak ingin mengubah foto.</small>
+                                </div>
+                            </div>
+                            
                             <div class="mb-3">
                                 <label class="form-label">Hal yang Menjadi Ketertarikan Pribadi</label>
                                 <div class="row">
@@ -605,7 +618,9 @@ $(document).ready(function() {
         $.ajax({
             url: '{{ route("admin.anggota.update", $anggota->id) }}',
             method: 'POST',
-            data: $(this).serialize(),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
